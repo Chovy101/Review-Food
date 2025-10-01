@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ReviewFood - รีวิวอาหารใน TNI</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">
+                <h1>🍜 ReviewFood</h1>
+                <p>รีวิวอาหารใน TNI</p>
+            </div>
+            <div class="nav-menu" id="navMenu">
+                <a href="#home" class="nav-link active">หน้าแรก</a>
+                <a href="#create" class="nav-link" id="createPostLink">เขียนรีวิว</a>
+                <a href="#admin" class="nav-link admin-only" id="adminLink" style="display: none;">Admin</a>
+                <button class="btn btn-primary" id="loginBtn">เข้าสู่ระบบ</button>
+                <div class="user-menu" id="userMenu" style="display: none;">
+                    <span id="userName">User</span>
+                    <button class="btn btn-secondary" id="logoutBtn">ออกจากระบบ</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close" id="closeModal">&times;</span>
+            <h2>เข้าสู่ระบบ</h2>
+            <form id="loginForm">
+                <input type="email" id="loginEmail" placeholder="อีเมล" required>
+                <input type="password" id="loginPassword" placeholder="รหัสผ่าน" required>
+                <button type="submit" class="btn btn-primary btn-block">เข้าสู่ระบบ</button>
+            </form>
+            <p class="modal-footer">ยังไม่มีบัญชี? <a href="#" id="showRegister">สมัครสมาชิก</a></p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <span class="close" id="closeRegisterModal">&times;</span>
+            <h2>สมัครสมาชิก</h2>
+            <form id="registerForm">
+                <input type="text" id="registerName" placeholder="ชื่อ-นามสกุล" required>
+                <input type="email" id="registerEmail" placeholder="อีเมล" required>
+                <input type="password" id="registerPassword" placeholder="รหัสผ่าน" required>
+                <button type="submit" class="btn btn-primary btn-block">สมัครสมาชิก</button>
+            </form>
+            <p class="modal-footer">มีบัญชีแล้ว? <a href="#" id="showLogin">เข้าสู่ระบบ</a></p>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <!-- Home Section -->
+        <section id="home" class="section active">
+            <!-- Search & Filter -->
+            <div class="search-section">
+                <input type="text" id="searchInput" class="search-input" placeholder="ค้นหารีวิว...">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-category="all">ทั้งหมด</button>
+                    <button class="filter-btn" data-category="อาหารไทย">อาหารไทย</button>
+                    <button class="filter-btn" data-category="อาหารญี่ปุ่น">อาหารญี่ปุ่น</button>
+                    <button class="filter-btn" data-category="อาหารตะวันตก">อาหารตะวันตก</button>
+                    <button class="filter-btn" data-category="เครื่องดื่ม">เครื่องดื่ม</button>
+                    <button class="filter-btn" data-category="ของหวาน">ของหวาน</button>
+                </div>
+            </div>
+
+            <!-- Posts Grid -->
+            <div class="posts-grid" id="postsGrid">
+                <!-- Posts will be inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Create Post Section -->
+        <section id="create" class="section">
+            <div class="create-post-container">
+                <h2>เขียนรีวิวอาหาร</h2>
+                <form id="createPostForm">
+                    <input type="text" id="postTitle" placeholder="ชื่อร้าน/เมนู" required>
+                    <select id="postCategory" required>
+                        <option value="">เลือกหมวดหมู่</option>
+                        <option value="อาหารไทย">อาหารไทย</option>
+                        <option value="อาหารญี่ปุ่น">อาหารญี่ปุ่น</option>
+                        <option value="อาหารตะวันตก">อาหารตะวันตก</option>
+                        <option value="เครื่องดื่ม">เครื่องดื่ม</option>
+                        <option value="ของหวาน">ของหวาน</option>
+                    </select>
+                    <textarea id="postContent" placeholder="เขียนรีวิว..." rows="6" required></textarea>
+                    <input type="text" id="postHashtags" placeholder="แฮชแท็ก (แยกด้วยช่องว่าง เช่น #อร่อย #ราคาดี)">
+                    <div class="rating-input">
+                        <label>คะแนน:</label>
+                        <div class="stars">
+                            <span class="star" data-rating="1">★</span>
+                            <span class="star" data-rating="2">★</span>
+                            <span class="star" data-rating="3">★</span>
+                            <span class="star" data-rating="4">★</span>
+                            <span class="star" data-rating="5">★</span>
+                        </div>
+                        <input type="hidden" id="postRating" value="5">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">โพสต์รีวิว</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Admin Section -->
+        <section id="admin" class="section">
+            <div class="admin-container">
+                <h2>🛠️ Admin Dashboard</h2>
+                <div class="admin-tabs">
+                    <button class="tab-btn active" data-tab="posts">จัดการโพสต์</button>
+                    <button class="tab-btn" data-tab="users">จัดการผู้ใช้</button>
+                </div>
+                <div class="tab-content" id="adminPosts">
+                    <h3>รายการโพสต์ทั้งหมด</h3>
+                    <div id="adminPostsList"></div>
+                </div>
+                <div class="tab-content" id="adminUsers" style="display: none;">
+                    <h3>รายการผู้ใช้</h3>
+                    <div id="adminUsersList"></div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Post Detail Modal -->
+    <div class="modal" id="postModal">
+        <div class="modal-content modal-large">
+            <span class="close" id="closePostModal">&times;</span>
+            <div id="postDetail"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
